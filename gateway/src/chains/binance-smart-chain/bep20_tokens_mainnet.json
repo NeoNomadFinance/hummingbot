@@ -20,6 +20,15 @@
 
     },
     {
+      "name": "NeoNomad Finance",
+      "symbol": "NNI",
+      "address": "0xf0eB3c9088718a533C8FD64Dbcaa5927faed6D18",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://exchange.pancakeswap.finance/images/coins/0xf0eB3c9088718a533C8FD64Dbcaa5927faed6D18.png"
+
+    },
+    {
       "name": "Bakery Token",
       "symbol": "BAKE",
       "address": "0xe02df9e3e622debdd69fb838bb799e3f168902c5",
