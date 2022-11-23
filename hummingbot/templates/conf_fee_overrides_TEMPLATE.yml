@@ -86,10 +86,10 @@ blocktane_maker_percent_fee:
 blocktane_percent_fee_token:
 blocktane_taker_fixed_fees:
 blocktane_taker_percent_fee:
-btc_markets_percent_fee_token:  
-btc_markets_maker_percent_fee:  
-btc_markets_taker_percent_fee:  
-btc_markets_buy_percent_fee_deducted_from_returns: 
+btc_markets_percent_fee_token:
+btc_markets_maker_percent_fee:
+btc_markets_taker_percent_fee:
+btc_markets_buy_percent_fee_deducted_from_returns:
 bybit_perpetual_buy_percent_fee_deducted_from_returns:
 bybit_perpetual_maker_fixed_fees:
 bybit_perpetual_maker_percent_fee:
@@ -246,3 +246,9 @@ wazirx_maker_percent_fee:
 wazirx_percent_fee_token:
 wazirx_taker_fixed_fees:
 wazirx_taker_percent_fee:
+xt_buy_percent_fee_deducted_from_returns:
+xt_maker_fixed_fees:
+xt_maker_percent_fee:
+xt_percent_fee_token:
+xt_taker_fixed_fees:
+xt_taker_percent_fee:
