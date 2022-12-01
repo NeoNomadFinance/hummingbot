@@ -90,7 +90,7 @@ def start(self):
             self.markets[price_source_exchange]: ExchangeBase = ext_market
             asset_price_delegate = OrderBookAssetPriceDelegate(ext_market, asset_trading_pair)
         elif price_source == "custom_api":
-            ext_market = create_paper_trade_market(exchange, [raw_trading_pair])
+            ext_market = create_paper_trade_market(exchange, self.client_config_map, [raw_trading_pair])
             asset_price_delegate = APIAssetPriceDelegate(ext_market, price_source_custom_api,
                                                          custom_api_update_interval)
         inventory_cost_price_delegate = None
