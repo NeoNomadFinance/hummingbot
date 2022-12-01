@@ -1,65 +1,41 @@
-import asyncio
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
-import aiohttp
-from aiohttp import web
+import requests
 
 price = "0.01"
 UPDATE_INTERVAL = 2.0
 
 
-async def safe_wrapper(c):
-    try:
-        return await c
-    except asyncio.CancelledError:
-        raise
-    except Exception as e:
-        print(f"Unhandled error in background task: {str(e)}")
+hostName = "localhost"
+serverPort = 2357
 
 
-def safe_ensure_future(coro, *args, **kwargs):
-    return asyncio.ensure_future(safe_wrapper(coro), *args, **kwargs)
+class MyServer(BaseHTTPRequestHandler):
+    def do_GET(self):
+        global price
 
-
-async def update_price():
-    global price, UPDATE_INTERVAL
-    while True:
         try:
-            async with aiohttp.ClientSession() as session:
-                url = "https://api.coingecko.com/api/v3/coins/neonomad-finance?market_data=true"
-
-                response = await session.get(url)
-                result = await response.json()
-
-                price = result["market_data"]["current_price"]["usd"]
-                print(f"New price fetched: {price}")
+            response = requests.get("https://api.coingecko.com/api/v3/coins/neonomad-finance?market_data=true")
+            result = response.json()
+            new_price = result["market_data"]["current_price"]["usd"]
+            price = new_price
         except Exception as e:
-            print(e)
-        finally:
-            await asyncio.sleep(UPDATE_INTERVAL)
+            print(f"Error occurred fetching price {e}. response: {response}")
 
-
-async def get_price(request):
-    global price
-
-    return web.Response(text=str(price))
-
-
-async def main():
-
-    # Ref: https://stackoverflow.com/questions/64090183/python-nonblocking-server
-
-    event_loop = asyncio.get_event_loop()
-    # starts a loop in the background to update price at an interval.
-    safe_ensure_future(update_price(), loop=event_loop)
-
-    app = web.Application()
-    app.add_routes([web.get('/', get_price)])
-    runner = aiohttp.web.AppRunner(app)
-    await runner.setup()
-    await aiohttp.web.TCPSite(runner, host='localhost', port=2357).start()
-
-    await asyncio.Event().wait()
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(bytes(str(price), "utf-8"))
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    webServer = HTTPServer((hostName, serverPort), MyServer)
+    print("Server started http://%s:%s" % (hostName, serverPort))
+
+    try:
+        webServer.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+    webServer.server_close()
+    print("Server stopped.")
